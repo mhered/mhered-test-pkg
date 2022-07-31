@@ -1,3 +1,7 @@
+---
+typora-copy-images-to: assets
+---
+
 # mhered-test-pkg
 
 `mhered-test-pkg` is a simple package to demonstrate how to create a python package. 
@@ -115,8 +119,47 @@ $ git push
 
 Note: behavior is a bit strange. if some test fails, you need to add modified files and repeat the git commit - which is fine - but then if the file was open it seems to revert to an older version?
 
-## Add a license
+### Add a license
 
 [Add a license from github](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository) then pull changes to local. 
 
 This will add [LICENSE.md](./LICENSE.md)
+
+### Upload the stub package to TestPyPI
+
+Declare the test repository https://test.pypi.org in poetry and name it  `testpypi`:
+
+```bash
+$ poetry config repositories.testpypi https://test.pypi.org/legacy/
+```
+
+[Create an account on TestPyPI](https://test.pypi.org/account/register/), go to Account Settings to get an API token and then configure Poetry to use it:
+
+```bash
+$ poetry config http-basic.testpypi __token__ pypi-YOUR-API-TOKEN
+```
+
+Note: Be careful not to expose your API token, e.g. if you write it to a file use .gitignore so as not to commit and publish it publicly!
+
+Build and upload the package:
+
+```bash
+$ poetry build
+$ poetry publish -r testpypi
+```
+
+With this our package is live in TestPyPI: https://test.pypi.org/project/mhered-test-pkg/
+
+![mhered-test-pkg](assets/mhered-test-pkg.png)
+
+Note: Build creates the `dist` folder that should be added to `.gitignore`
+
+```bash
+$ echo dist/ >> .gitignore
+
+$ git add .
+$ git commit -m "Publish to TestPyPI"
+$ git push
+```
+
+We are ready to populate the package with code!
