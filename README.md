@@ -103,7 +103,7 @@ $ pre-commit install
 $ pre-commit run all-files
 ```
 
-Note: `pre-commit` is not found from outside of the shell - you can use `poetry run pre-commit`
+Note: `pre-commit` is not found if run from outside of the shell - you can use instead `poetry run pre-commit`
 
 Commit the changes (including the updates to `README.md`):  
 
@@ -112,3 +112,9 @@ $ git add *
 $ git commit -m "Run all pre-commits."
 $ git push
 ```
+
+Note: behavior is a bit strange. if some test fails, you need to add modified files and repeat the git commit - which is fine - but then if the file was open it seems to revert to an older version?
+
+## Add a license
+
+[Add a license from github](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository) then pull changes to local
