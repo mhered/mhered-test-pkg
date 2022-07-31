@@ -4,25 +4,41 @@ typora-copy-images-to: assets
 
 # mhered-test-pkg
 
-`mhered-test-pkg` is a simple package to demonstrate how to create a python package. 
+A simple demo package to practice how to create python packages. 
 
 Inspired in this article: https://mathspp.com/blog/how-to-create-a-python-package-in-2022
 
-## How to
+The code implements a simple Rock, Paper, Scissors text-based game. Inspired by Al Sweigart's  [Automate the boring stuff with Python](https://automatetheboringstuff.com/).
+
+Installation:
+
+```bash
+$ pip install mhered-test-pkg
+```
+
+Usage:
+
+```bash
+$ python3 -m mhered_test_pkg
+```
+
+
+
+## How to create a python package 
 
 ### Pick a name
 
-Check the name is available in [PiPy](https://pypi.org/)
+Check the name is available in [PyPI](https://pypi.org/)
 
 ### Initialize `poetry`
 
-Install poetry (modified the instructions starting from [here](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions)):
+Install `poetry` (I started from [here](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions) then modified the instructions):
 
  ```bash
 $ curl -sSL https://install.python-poetry.org/ | python3 -
  ```
 
-Create a dedicated folder locally and initialize poetry inside
+Create a local dedicated folder and initialize `poetry` inside
 
 ```bash
 $ cd ~
@@ -46,9 +62,9 @@ $ mv README.rst README.md
 $ poetry install
 ```
 
-Note: I renamed README.rst to README.md because I prefer to work in Markdown.
+Note: I renamed `README.rst` to `README.md` because I prefer to work in **Markdown**.
 
-Running `poetry install` creates a file `poetry.lock` with the dependencies
+Note: Running `poetry install` creates a file `poetry.lock` with the dependencies
 
 ### Initialize git in the local folder
 
@@ -98,7 +114,7 @@ repos:
         args: ["--profile", "black"]
 ```
 
-Activate the `poetry` virtual environment to be able to use `pre-commit` then install the hooks and then we run them once, just for good measure. 
+Activate the `poetry` virtual environment to be able to use `pre-commit` then install the hooks and run them once: 
 
 ```bash
 $ poetry shell
@@ -107,7 +123,7 @@ $ pre-commit install
 $ pre-commit run all-files
 ```
 
-Note: `pre-commit` is not found if run from outside of the shell - you can use instead `poetry run pre-commit`
+Note: `pre-commit` is not found unless run from inside the shell - or you can use `poetry run pre-commit`
 
 Commit the changes (including the updates to `README.md`):  
 
@@ -117,29 +133,29 @@ $ git commit -m "Run all pre-commits."
 $ git push
 ```
 
-Note: behavior is a bit strange. if some test fails, you need to add modified files and repeat the git commit - which is fine - but then if the file was open it seems to revert to an older version?
+Note: If some test fails, you need to add again the modified files and repeat the git commit - which is fine. But there is a strange behavior if the file was open: it seems to revert to an older version?
 
 ### Add a license
 
-[Add a license from github](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository) then pull changes to local. 
+[Add a license from the github repo](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository) then pull changes to local. 
 
 This will add [LICENSE.md](./LICENSE.md)
 
 ### Upload the stub package to TestPyPI
 
-Declare the test repository https://test.pypi.org in Poetry and name it  `testpypi`:
+Declare the test repository https://test.pypi.org in `poetry` and name it  `testpypi`:
 
 ```bash
 $ poetry config repositories.testpypi https://test.pypi.org/legacy/
 ```
 
-[Create an account on TestPyPI](https://test.pypi.org/account/register/), go to Account Settings to get an API token and then configure Poetry to use it:
+[Create an account on TestPyPI](https://test.pypi.org/account/register/), go to Account Settings to get an API token and then configure `poetry` to use it:
 
 ```bash
 $ poetry config http-basic.testpypi __token__ pypi-YOUR-TESTPYPI-API-TOKEN
 ```
 
-Note: Be careful not to expose your API token, e.g. if you write it to a file use .gitignore so as not to commit and publish it publicly!
+Note: Be careful not to expose your API token, e.g. I wrote it to a `secrets.md` file then used `.gitignore` so as not to commit and publish it publicly.
 
 Build and upload the package:
 
@@ -150,9 +166,9 @@ $ poetry publish -r testpypi
 
 With this our package is live in TestPyPI: https://test.pypi.org/project/mhered-test-pkg/
 
-![mhered-test-pkg](assets/mhered-test-pkg.png)
+<img src="assets/mhered-test-pkg.png" alt="mhered-test-pkg" style="zoom: 50%;" />
 
-Note: Build creates the `dist` folder that should be added to `.gitignore`
+Note: Build creates the `dist/` folder that should be added to `.gitignore`
 
 ```bash
 $ echo dist/ >> .gitignore
@@ -168,20 +184,20 @@ For this example I wrote a simple Rock, Paper, Scissors game inspired and slight
 
 ### Changelog management
 
-Add [scriv](https://pypi.org/project/scriv/) for changelog management, as a development dependency with the [toml] extra :
+Add [scriv](https://pypi.org/project/scriv/) for changelog management, as a development dependency with the `[toml]` extra :
 
 ```
 $ poetry add -D scriv[toml]
 ```
 
-Configure scriv to use Markdown by adding the following lines to the `pyproject.toml` file, cfr [scriv's readthedocs](https://scriv.readthedocs.io/en/latest/configuration.html):
+Configure `scriv` to use **Markdown** by adding the following lines to the `pyproject.toml` file, see [scriv's readthedocs](https://scriv.readthedocs.io/en/latest/configuration.html):
 
 ```toml
 [tool.scriv]
 format = "md"
 ```
 
-Then create the default directory for changelog fragments `changelog.d`:
+Then create the default directory for changelog fragments `changelog.d/`. Note: add a `.gitkeep`  file so that git tracks the empty folder.
 
 ```
 $ mkdir changelog.d
@@ -193,28 +209,24 @@ $ git add pyproject.toml poetry.lock changelog.d/.gitkeep
 $ git commit -m "Add scriv as devt dependency."
 ```
 
-Note: `.gitkeep`  so that git tracks the empty folder
-
-A `md` file is created in the `changelog.d` folder. Add a description:
+Note: the command ` scriv create` creates a `.md` fragment file in the `changelog.d` folder. Add a description in the file:
 
 ```markdown
 ### Added
 
 - A first simple implementation of Rock Paper Scissors
-
 ```
 
-Lets update README.md and commit everything:
+Lets update `README.md` and commit everything:
 
 ```bash
-
 $ git add README.md changelog.d/* __init__.py
 $ git commit -m "Simple Rock Paper Scissors game"
 ```
 
 ### Publish the package to PyPI
 
-Create a [PyPI](https://pypi.org/) account and API token, and configure Poetry to use it:
+Create a [PyPI](https://pypi.org/) account and API token, and configure `poetry` to use it:
 
 ```bash
 $ poetry config pypi-token.pipy pypi-YOUR-PYPI-API-TOKEN
@@ -228,21 +240,17 @@ $ poetry publish --build
 
 ### Do a victory lap
 
-Install, import and uninstall the package (outside of the shell) to check it works
+Install, import and uninstall the package (outside of the shell) to check it works. Note: the hyphens (`-`) in the package name turn into underscores (`_`) in the module name.
 
 ```bash
-$ python3 -m pip install mhered-test-pkg
+$ pip install mhered-test-pkg
 Defaulting to user installation because normal site-packages is not writeable
 Collecting mhered-test-pkg
   Using cached mhered_test_pkg-0.1.0-py3-none-any.whl (2.5 kB)
 Installing collected packages: mhered-test-pkg
 Successfully installed mhered-test-pkg-0.1.0
 
-$ python3
-Python 3.8.10 (default, Jun 22 2022, 20:18:18) 
-[GCC 9.4.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> import mhered_test_pkg
+$ python3 -m mhered_test_pkg
 ROCK, PAPER, SCISSORS
 0 Wins, 0 Losses, 0 Ties
 Enter your move: (r)ock (p)aper (s)cissors or (q)uit
@@ -254,7 +262,7 @@ Enter your move: (r)ock (p)aper (s)cissors or (q)uit
 q
 Bye!
 
-$ python3 -m pip uninstall mhered-test-pkg
+$ pip uninstall mhered-test-pkg
 ROCK, PAPER, SCISSORS
 0 Wins, 0 Losses, 0 Ties
 Enter your move: (r)ock (p)aper (s)cissors or (q)uit
@@ -267,4 +275,29 @@ q
 Bye!
 ```
 
-Ready to publish a release...
+###  Publish a release
+
+Add a description, installation and usage instructions in the `README.md` and declare it In `pyproject.toml`:
+
+```toml
+readme = "README.md"
+```
+
+Make `scriv` collect the previously created changelog fragment to a new `CHANGELOG.md` file with:
+
+```bash
+$ scriv collect
+```
+
+Lets commit: 
+
+```bash
+$ git add changelog.d/20220731_143829_manolo.heredia.md CHANGELOG.md README.md pyproject.toml
+$ git commit -m "Prepare release 0.1.0"
+```
+
+Tag the commit:
+
+```bash
+$ git tag -a v0.1.0 -m "Initial version"
+```
