@@ -117,4 +117,6 @@ Note: behavior is a bit strange. if some test fails, you need to add modified fi
 
 ## Add a license
 
-[Add a license from github](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository) then pull changes to local
+[Add a license from github](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository) then pull changes to local. 
+
+This will add [LICENSE.md](./LICENSE.md)
