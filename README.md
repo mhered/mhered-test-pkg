@@ -162,4 +162,46 @@ $ git commit -m "Publish to TestPyPI"
 $ git push
 ```
 
-We are ready to populate the package with code!
+### Populate the package with code
+
+For this example I wrote a simple Rock, Paper, Scissors game inspired and slightly refactored from the example proposed by Al Sweigart in his great book [Automate the boring stuff with Python](https://automatetheboringstuff.com/). The code goes in `mhered-test-pkg/__init__.py`.
+
+### Changelog management
+
+Add [scriv](https://pypi.org/project/scriv/) for changelog management, as a development dependency with the [toml] extra :
+
+```
+$ poetry add -D scriv[toml]
+```
+
+Configure scriv to use Markdown by adding the following lines to the `pyproject.toml` file, cfr [scriv's readthedocs](https://scriv.readthedocs.io/en/latest/configuration.html):
+
+```toml
+[tool.scriv]
+format = "md"
+```
+
+Then create the default directory for changelog fragments `changelog.d`:
+
+```
+$ mkdir changelog.d
+$ scriv create
+```
+
+A `md` file is created in the `changelog.d` folder. Add a description:
+
+```markdown
+### Added
+
+- A first simple implementation of Rock Paper Scissors
+
+```
+
+Lets commit everything:
+
+```bash
+$ git add pyproject.toml poetry.lock changelog.d/.gitkeep
+$ git commit -m "Add scriv as devt dependency."
+$ git add README.md changelog.d/* __init__.py
+$ git commit -m "Simple Rock Paper Scissors game"
+```
