@@ -103,6 +103,12 @@ $ pre-commit install
 $ pre-commit run all-files
 ```
 
-Note: From outside of the  `pre-commit` is not found - you can use `poetry run pre-commit`
+Note: `pre-commit` is not found from outside of the shell - you can use `poetry run pre-commit`
 
-Commit the changes (including the updates to `README.md`:
+Commit the changes (including the updates to `README.md`):  
+
+```bash
+$ git add *
+$ git commit -m "Run all pre-commits."
+$ git push
+```
