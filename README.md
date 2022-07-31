@@ -127,7 +127,7 @@ This will add [LICENSE.md](./LICENSE.md)
 
 ### Upload the stub package to TestPyPI
 
-Declare the test repository https://test.pypi.org in poetry and name it  `testpypi`:
+Declare the test repository https://test.pypi.org in Poetry and name it  `testpypi`:
 
 ```bash
 $ poetry config repositories.testpypi https://test.pypi.org/legacy/
@@ -136,7 +136,7 @@ $ poetry config repositories.testpypi https://test.pypi.org/legacy/
 [Create an account on TestPyPI](https://test.pypi.org/account/register/), go to Account Settings to get an API token and then configure Poetry to use it:
 
 ```bash
-$ poetry config http-basic.testpypi __token__ pypi-YOUR-API-TOKEN
+$ poetry config http-basic.testpypi __token__ pypi-YOUR-TESTPYPI-API-TOKEN
 ```
 
 Note: Be careful not to expose your API token, e.g. if you write it to a file use .gitignore so as not to commit and publish it publicly!
@@ -211,3 +211,60 @@ Lets update README.md and commit everything:
 $ git add README.md changelog.d/* __init__.py
 $ git commit -m "Simple Rock Paper Scissors game"
 ```
+
+### Publish the package to PyPI
+
+Create a [PyPI](https://pypi.org/) account and API token, and configure Poetry to use it:
+
+```bash
+$ poetry config pypi-token.pipy pypi-YOUR-PYPI-API-TOKEN
+```
+
+Build and publish:
+
+```bash
+$ poetry publish --build
+```
+
+### Do a victory lap
+
+Install, import and uninstall the package (outside of the shell) to check it works
+
+```bash
+$ python3 -m pip install mhered-test-pkg
+Defaulting to user installation because normal site-packages is not writeable
+Collecting mhered-test-pkg
+  Using cached mhered_test_pkg-0.1.0-py3-none-any.whl (2.5 kB)
+Installing collected packages: mhered-test-pkg
+Successfully installed mhered-test-pkg-0.1.0
+
+$ python3
+Python 3.8.10 (default, Jun 22 2022, 20:18:18) 
+[GCC 9.4.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import mhered_test_pkg
+ROCK, PAPER, SCISSORS
+0 Wins, 0 Losses, 0 Ties
+Enter your move: (r)ock (p)aper (s)cissors or (q)uit
+r
+ROCK versus... SCISSORS
+You win!
+1 Wins, 0 Losses, 0 Ties
+Enter your move: (r)ock (p)aper (s)cissors or (q)uit
+q
+Bye!
+
+$ python3 -m pip uninstall mhered-test-pkg
+ROCK, PAPER, SCISSORS
+0 Wins, 0 Losses, 0 Ties
+Enter your move: (r)ock (p)aper (s)cissors or (q)uit
+r
+ROCK versus... SCISSORS
+You win!
+1 Wins, 0 Losses, 0 Ties
+Enter your move: (r)ock (p)aper (s)cissors or (q)uit
+q
+Bye!
+```
+
+Ready to publish a release...
