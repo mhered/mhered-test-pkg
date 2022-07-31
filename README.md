@@ -185,8 +185,15 @@ Then create the default directory for changelog fragments `changelog.d`:
 
 ```
 $ mkdir changelog.d
+$ touch changelog.d/.gitkeep
+
 $ scriv create
+
+$ git add pyproject.toml poetry.lock changelog.d/.gitkeep
+$ git commit -m "Add scriv as devt dependency."
 ```
+
+Note: `.gitkeep`  so that git tracks the empty folder
 
 A `md` file is created in the `changelog.d` folder. Add a description:
 
@@ -197,11 +204,10 @@ A `md` file is created in the `changelog.d` folder. Add a description:
 
 ```
 
-Lets commit everything:
+Lets update README.md and commit everything:
 
 ```bash
-$ git add pyproject.toml poetry.lock changelog.d/.gitkeep
-$ git commit -m "Add scriv as devt dependency."
+
 $ git add README.md changelog.d/* __init__.py
 $ git commit -m "Simple Rock Paper Scissors game"
 ```
