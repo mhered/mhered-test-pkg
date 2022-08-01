@@ -1,3 +1,10 @@
+
+<a id='changelog-0.1.2'></a>
+# 0.1.2 — 2022-08-01
+
+## Added
+
+- Basic tests
 <a id='changelog-0.1.1'></a>
 
 # 0.1.1 — 2022-08-01
