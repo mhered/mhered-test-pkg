@@ -190,11 +190,12 @@ Add [scriv](https://pypi.org/project/scriv/) for changelog management, as a deve
 $ poetry add -D scriv[toml]
 ```
 
-Configure `scriv` to use **Markdown** by adding the following lines to the `pyproject.toml` file, see [scriv's readthedocs](https://scriv.readthedocs.io/en/latest/configuration.html):
+Configure `scriv` to use **Markdown** and add version numbering in the title by adding the following lines to the `pyproject.toml` file, refer to [scriv's readthedocs](https://scriv.readthedocs.io/en/latest/configuration.html):
 
 ```toml
 [tool.scriv]
 format = "md"
+version = "literal: pyproject.toml: tool.poetry.version"
 ```
 
 Then create the default directory for changelog fragments `changelog.d/`. Note: add a `.gitkeep`  file so that git tracks the empty folder.
@@ -296,8 +297,104 @@ $ git add changelog.d/20220731_143829_manolo.heredia.md CHANGELOG.md README.md p
 $ git commit -m "Prepare release 0.1.0"
 ```
 
-Tag the commit:
+Tag the commit, and push it to the remote (seen [here](https://stackabuse.com/git-push-tags-to-a-remote-repo/)):
 
 ```bash
 $ git tag -a v0.1.0 -m "Initial version"
+$ git push origin v0.1.0
+```
+
+
+
+I discovered I hadn't configured version numbering for scriv, so I did it now, and added a new release to test it.
+
+First modify `pyproject.toml` to increment the version to `0.1.1` and have `scriv` read the version from `tool.poetry.version`:
+
+```toml
+[tool.poetry]
+name = "mhered-test-pkg"
+version = "0.1.1"
+description = "A simple demo package to practice how to create python packages."
+authors = ["Manuel Heredia <manolo.heredia@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+pre-commit = "^2.20.0"
+scriv = {extras = ["toml"], version = "^0.16.0"}
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.scriv]
+format = "md"
+version = "literal: pyproject.toml: tool.poetry.version"
+```
+
+Next add a changelog fragment:
+
+```bash
+$ scriv create
+```
+
+and edit it to describe the change
+
+```markdown
+### Fixed
+
+- Configure `scriv` to get version number from `pyproject.toml`
+```
+
+Bump version in `mhered-test-pkg/__init__.py` `__version__ = "0.1.1"`
+
+Add a unit test to check it is always in sync with `tool.poetry.version` in `pyproject.toml` ([there seems to be no better way](https://github.com/python-poetry/poetry/issues/144#issuecomment-877835259))
+
+```python
+import toml
+from pathlib import Path
+import mhered_test_pkg
+
+def test_versions_are_in_sync():
+    """ Checks if tool.poetry.version in pyproject.toml and
+    	__version__ in mhered_test_pkg.__init__.py are in sync."""
+
+    path = Path(__file__).resolve().parents[2] / "pyproject.toml"
+    pyproject = toml.loads(open(str(path)).read())
+    pyproject_version = pyproject["tool"]["poetry"]["version"]
+
+    init_py_version = mhered_test_pkg.__version__
+    
+    assert init_py_version == pyproject_version
+```
+
+Add a new changelog fragment:
+
+```bash
+$ scriv create
+```
+
+and edit it to describe the change
+
+```markdown
+## Added
+
+- Test to check that versions defined in `pyproject.py` and `__init__.py` are in sync
+```
+
+
+
+Update the Changelog:
+
+```
+$ scriv collect
+
+$ git add
+$ git commit -m "Configure versions in scriv"
+
+$ git tag -a v0.1.1 -m "Configure versions in scriv"
+$ git push origin v0.1.1
 ```

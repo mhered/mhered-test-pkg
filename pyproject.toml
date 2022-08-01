@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mhered-test-pkg"
-version = "0.1.0"
+version = "0.1.1"
 description = "A simple demo package to practice how to create python packages."
 authors = ["Manuel Heredia <manolo.heredia@gmail.com>"]
 readme = "README.md"
@@ -19,3 +19,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.scriv]
 format = "md"
+version = "literal: pyproject.toml: tool.poetry.version"
