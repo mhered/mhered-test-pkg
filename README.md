@@ -419,3 +419,134 @@ warning: Version 0.1.0 has no tag. No release will be made.
 ```
 
 It still does not work... to be continued.
+
+### Troubleshooting
+
+There is something off with the tag `v0.1.0`. Wat linked to `8ad878f` which does not show here!
+
+```bash
+$ git log --oneline
+5979855 (HEAD -> main, origin/main) Update README.md
+fa7a843 (tag: v0.1.1) Configure versions in scriv
+74b8fcb Prepare release 0.1.0
+9519229 Add victory lap to README.md
+c22f560 Move __init__.py to mhered_test_pkg/
+066172e Minor updates to README.md
+e438080 Simple Rock Paper Scissors game
+2c93077 Add scriv as devt dependency
+262bb9e Publish to TestPyPI
+dd9cfd9 Add .gitignore to protect API tokens
+81fa08d Minor change of README.md
+4d8b935 Update License in README.md
+e18df98 Create LICENSE.md
+9400227 Update README.md
+3d3a9d8 Run all pre-commits.
+8de2b5a Add pre-commit devt dependency
+9743aef First commit
+```
+
+lets repair the tag `v0.1.0`:
+
+```bash
+$ git tag -d v0.1.0						# delete the old tag locally
+Deleted tag 'v0.1.0' (was 8ad878f)
+$ git push origin :refs/tags/v0.1.0		# delete the old tag remotely
+To https://github.com/mhered/mhered-test-pkg.git
+ - [deleted]         v0.1.0
+$ git tag -a v0.1.0 74b8fcb				# make a new tag locally
+$ git push origin v0.1.0				# push the new local tag to the remote
+```
+
+Voilá:
+
+```bash
+$ git log --oneline
+5979855 (HEAD -> main, origin/main) Update README.md
+fa7a843 (tag: v0.1.1) Configure versions in scriv
+74b8fcb (tag: v0.1.0) Prepare release 0.1.0
+9519229 Add victory lap to README.md
+c22f560 Move __init__.py to mhered_test_pkg/
+066172e Minor updates to README.md
+e438080 Simple Rock Paper Scissors game
+2c93077 Add scriv as devt dependency
+262bb9e Publish to TestPyPI
+dd9cfd9 Add .gitignore to protect API tokens
+81fa08d Minor change of README.md
+4d8b935 Update License in README.md
+e18df98 Create LICENSE.md
+9400227 Update README.md
+3d3a9d8 Run all pre-commits.
+8de2b5a Add pre-commit devt dependency
+9743aef First commit
+```
+
+### Write tests
+
+I added a couple of tests, refactored a bit the code and committed the changes.
+
+Then, to create a release: 
+
+- bump the  version
+- edit `__init__.py` manually to sync version number
+- run the tests
+- create a fragment - with `--edit` option to launch the editor directly
+- collect all fragments to `CHANGELOG.md`
+- commit changes to `pyproject.toml README.md CHANGELOG.md mhered_test_pkg/__init__.py`
+- create tag
+- create a release with 
+- push commit and tag
+
+```bash
+$ git commit -a -m "Add tests"
+$ poetry version patch
+$ atom mhered_test_pkg/__init__.py
+$ pytest
+============================= test session starts =============================
+platform linux -- Python 3.8.10, pytest-5.4.3, py-1.11.0, pluggy-0.13.1
+rootdir: /home/mhered/mhered-test-pkg
+collected 4 items                         
+tests/test_mhered_test_pkg.py ....                                       [100%]
+============================== 4 passed in 0.02s ==============================
+$ scriv create --edit
+$ scriv collect
+
+$ git commit -m "Prepare release 0.1.2"
+$ git push
+
+$ git tag -a 0.1.2 -m "Add tests"
+$ git push origin 0.1.2
+```
+
+This time `$ scriv github-release -v  DEBUG` gives an error message so I rename tag `0.1.2` to `v0.1.2`:
+
+```bash
+$ git tag v0.1.2 0.1.2^{}
+$ git tag -d 0.1.2
+$ git push origin :refs/tags/0.1.2
+$ git log  --oneline
+aa3e44a (HEAD -> main, tag: v0.1.2, origin/main) Prepare release 0.1.2
+b03efa8 Add tests
+d688927 Passes basic tests
+5979855 Update README.md
+fa7a843 (tag: v0.1.1) Configure versions in scriv
+74b8fcb (tag: v0.1.0) Prepare release 0.1.0
+9519229 Add victory lap to README.md
+...
+```
+
+Back to normal:
+
+```bash
+$ scriv github-release -v DEBUG
+debug: Running command 'git tag'
+debug: Command exited with 0 status. Output: 'v0.1.0\nv0.1.1\nv0.1.2\n'
+debug: Running command ['git', 'config', '--get-regex', 'remote[.].*[.]url']
+debug: Command exited with 0 status. Output: 'remote.origin.url https://github.com/mhered/mhered-test-pkg.git\n'
+debug: Starting new HTTPS connection (1): api.github.com:443
+debug: https://api.github.com:443 "GET /repos/mhered/mhered-test-pkg/releases HTTP/1.1" 200 717
+warning: Version 0.1.2 has no tag. No release will be made.
+warning: Version 0.1.1 has no tag. No release will be made.
+warning: Version 0.1.0 has no tag. No release will be made.
+```
+
+Apparently this is because I need to add my PAT as environment variable `GITHUB_TOKEN`, see [scriv docs](https://scriv.readthedocs.io/en/latest/commands.html#scriv-github-release). I tried though, and it does not work...
