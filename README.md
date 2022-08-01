@@ -198,19 +198,23 @@ format = "md"
 version = "literal: pyproject.toml: tool.poetry.version"
 ```
 
-Then create the default directory for changelog fragments `changelog.d/`. Note: add a `.gitkeep`  file so that git tracks the empty folder.
+Then create the default directory for changelog fragments `changelog.d/`. Note: add an empty `.gitkeep`  file so that git tracks the empty folder.
 
-```
+```bash
 $ mkdir changelog.d
 $ touch changelog.d/.gitkeep
-
-$ scriv create
 
 $ git add pyproject.toml poetry.lock changelog.d/.gitkeep
 $ git commit -m "Add scriv as devt dependency."
 ```
 
-Note: the command ` scriv create` creates a `.md` fragment file in the `changelog.d` folder. Add a description in the file:
+Create a new `.md` fragment file in the `changelog.d` folder: 
+
+```bash
+$ scriv create
+```
+
+Edit it to add a description of the changes:
 
 ```markdown
 ### Added
@@ -218,7 +222,7 @@ Note: the command ` scriv create` creates a `.md` fragment file in the `changelo
 - A first simple implementation of Rock Paper Scissors
 ```
 
-Lets update `README.md` and commit everything:
+Update `README.md` and commit everything:
 
 ```bash
 $ git add README.md changelog.d/* __init__.py
@@ -278,7 +282,7 @@ Bye!
 
 ###  Publish a release
 
-Add a description, installation and usage instructions in the `README.md` and declare it In `pyproject.toml`:
+Add a description, installation and usage instructions in the `README.md` and declare it in `pyproject.toml`:
 
 ```toml
 readme = "README.md"
@@ -303,8 +307,6 @@ Tag the commit, and push it to the remote (seen [here](https://stackabuse.com/gi
 $ git tag -a v0.1.0 -m "Initial version"
 $ git push origin v0.1.0
 ```
-
-
 
 I discovered I hadn't configured version numbering for scriv, so I did it now, and added a new release to test it.
 
@@ -389,12 +391,31 @@ and edit it to describe the change
 
 Update the Changelog:
 
-```
+```bash
 $ scriv collect
+```
 
-$ git add
+Commit and push, tag and push:
+
+```bash
+$ git add pyproject.toml mhered_test_pkg/__init__.py tests/test_mhered_test_pkg.py CHANGELOG.md README.md
+
 $ git commit -m "Configure versions in scriv"
+$ git push
 
 $ git tag -a v0.1.1 -m "Configure versions in scriv"
 $ git push origin v0.1.1
+
+$ scriv github-release -v  DEBUG
+debug: Running command 'git tag'
+debug: Command exited with 0 status. Output: 'v0.1.0\nv0.1.1\n'
+debug: Running command ['git', 'config', '--get-regex', 'remote[.].*[.]url']
+debug: Command exited with 0 status. Output: 'remote.origin.url https://github.com/mhered/mhered-test-pkg.git\n'
+debug: Starting new HTTPS connection (1): api.github.com:443
+debug: https://api.github.com:443 "GET /repos/mhered/mhered-test-pkg/releases HTTP/1.1" 200 600
+warning: Version 0.1.1 has no tag. No release will be made.
+warning: Version 0.1.0 has no tag. No release will be made.
+
 ```
+
+It still does not work... to be continued.
