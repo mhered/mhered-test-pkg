@@ -5,13 +5,12 @@ import sys
 
 
 def move_msg(Move):
-    if Move == "r":
-        Msg = "ROCK"
-    elif Move == "p":
-        Msg = "PAPER"
-    elif Move == "s":
-        Msg = "SCISSORS"
-    return Msg
+    move_Msgs = {
+        "r": "ROCK",
+        "p": "PAPER",
+        "s": "SCISSORS",
+    }
+    return move_Msgs[Move]
 
 
 def Rock_Paper_Scissors():
