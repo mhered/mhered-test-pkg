@@ -550,3 +550,101 @@ warning: Version 0.1.0 has no tag. No release will be made.
 ```
 
 Apparently this is because I need to add my PAT as environment variable `GITHUB_TOKEN`, see [scriv docs](https://scriv.readthedocs.io/en/latest/commands.html#scriv-github-release). I tried though, and it does not work...
+
+### Automating with `tox`
+
+`tox` automates testing, linting, formatting, test coverage, documentation, etc.
+
+We add tox as a development dependency:
+
+```bash
+$ poetry add -D tox
+```
+
+Configuration is done in a `tox.ini` file in `toml` format, which can be initiated in its simplest form running  `$ tox-quickstart` and answering a few questions.
+
+```toml
+# tox (https://tox.readthedocs.io/) is a tool for running tests
+# in multiple virtualenvs. This configuration file will run the
+# test suite on all supported python versions. To use it, "pip install tox"
+# and then run "tox" from this directory.
+
+[tox]
+envlist = py37
+
+[testenv]
+deps =
+    pytest
+commands =
+    pytest
+```
+
+However this simplest version did not work. I had to do a few iteratons:
+
+* Added `isolated_build = True` to work with `poetry`
+* Added `toml` to dependencies otherwise `pytest`  cannot import it. It seems that `tox` creates its own virtual environments and you need to add all dependencies again...
+* Added formatting with `black`, linting with `flake8`, `pylint`, `mccabe`, sorting of imports with [isort](https://pycqa.github.io/isort/), and testing with `pytest`. [mccabe](https://pypi.org/project/mccabe/) is a `flake8` plugin to check the code's McCabe complexity (should be <10). 
+* `black --check` does not modify the files, only exits with an error if the check is not passed. What is the point?
+
+Result:
+
+```toml
+# tox (https://tox.readthedocs.io/) is a tool for running tests
+# in multiple virtualenvs. This configuration file will run the
+# test suite on all supported python versions. To use it, "pip install tox"
+# and then run "tox" from this directory.
+
+[tox]
+isolated_build = True
+envlist = py38
+
+[testenv]
+deps =
+    toml
+    black
+    flake8
+    isort
+    mccabe
+    pylint
+    pytest
+
+commands =
+    black --check mhered_test_pkg
+    isort  --check mhered_test_pkg
+    flake8 mhered_test_pkg --max-complexity 10
+    pylint mhered_test_pkg
+    pytest .
+```
+
+ Execute with: 
+
+```bash
+$ tox
+```
+
+Question: why use `tox` when I can use a `poetry` script or even better a `pre-commit` hook? 
+
+### Check coverage
+
+Installation and basic execution of [coverage](https://coverage.readthedocs.io/en/6.4.2/index.html):
+
+```bash
+$ poetry add -D coverage
+$ coverage run -m pytest
+$ coverage report
+Name                            Stmts   Miss  Cover
+---------------------------------------------------
+mhered_test_pkg/__init__.py        49     38    22%
+tests/__init__.py                   0      0   100%
+tests/test_mhered_test_pkg.py      15      0   100%
+---------------------------------------------------
+TOTAL                              64     38    41%
+
+```
+
+We can execute the checks in a more nuanced way including all files in the package and all branching paths, and we can also generate nicer HTML reports [such as this one](./assets/sample_html_coverage_report/index.html) as follows:
+
+```bash
+$ coverage run --source=mhered_test_pkg --branch -m pytest .
+$ coverage html
+```
