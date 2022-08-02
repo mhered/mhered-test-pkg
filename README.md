@@ -690,3 +690,32 @@ Added tests to increase coverage up to 97% - i.e. all lines of code covered exce
 ![97pc_coverage](assets/97pc_coverage.png)
 
 In the process I learned about monkeypatching user input, using iterators to simulate a sequence of inputs, or testing for sys exit, see references in [./tests/test_mhered_test_pkg.py](./tests/test_mhered_test_pkg.py)
+
+Usual ritual to create a release. As some of the steps modify files that need to be committed this process ends up being iterative. I try to keep it clean using profusely `$ git commit --amend`along the way:
+
+```bash
+$ scriv create --edit # describe changes in a fragment
+$ poetry version patch # bump version
+$ atom mhered_test_pkg/__init__.py # sync _version__
+$ scriv collect # update CHANGELOG.md
+$ git add . 
+$ git commit
+$ git tag -a v0.1.3 -m "97% test coverage"
+$ git push
+$ git log --oneline
+91c4aa1 (HEAD -> main, tag: v0.1.3, origin/main) 0.1.3 automated with tox and 97% coverage
+d6670c4 Automating with tox
+028028a Update README.md
+aa3e44a (tag: v0.1.2) Prepare release 0.1.2
+b03efa8 Add tests
+d688927 Passes basic tests
+5979855 Update README.md
+fa7a843 (tag: v0.1.1) Configure versions in scriv
+74b8fcb (tag: v0.1.0) Prepare release 0.1.0
+...
+$ git push origin v0.1.3
+```
+
+
+
+Next, I am ready to start with CI/CD with GitHub Actions...
