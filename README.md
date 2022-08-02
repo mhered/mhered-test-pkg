@@ -493,7 +493,6 @@ Then, to create a release:
 - collect all fragments to `CHANGELOG.md`
 - commit changes to `pyproject.toml README.md CHANGELOG.md mhered_test_pkg/__init__.py`
 - create tag
-- create a release with 
 - push commit and tag
 
 ```bash
@@ -516,6 +515,8 @@ $ git push
 $ git tag -a 0.1.2 -m "Add tests"
 $ git push origin 0.1.2
 ```
+
+* try to create a release with `scriv github-release`
 
 This time `$ scriv github-release -v  DEBUG` gives an error message so I rename tag `0.1.2` to `v0.1.2`:
 
@@ -549,7 +550,7 @@ warning: Version 0.1.1 has no tag. No release will be made.
 warning: Version 0.1.0 has no tag. No release will be made.
 ```
 
-Apparently this is because I need to add my PAT as environment variable `GITHUB_TOKEN`, see [scriv docs](https://scriv.readthedocs.io/en/latest/commands.html#scriv-github-release). I tried though, and it does not work...
+Apparently this is because I need to add my PAT as environment variable `GITHUB_TOKEN`, see [scriv docs](https://scriv.readthedocs.io/en/latest/commands.html#scriv-github-release). I tried though, and it does not work... I create the release manually in github.
 
 ### Automating with `tox`
 
@@ -648,3 +649,44 @@ We can execute the checks in a more nuanced way including all files in the packa
 $ coverage run --source=mhered_test_pkg --branch -m pytest .
 $ coverage html
 ```
+
+![22pc_coverage](assets/22pc_coverage.png)
+
+To add `coverage` to `tox` modify `tox.ini` to add the relevant lines:
+
+```toml
+# tox (https://tox.readthedocs.io/) is a tool for running tests
+# in multiple virtualenvs. This configuration file will run the
+# test suite on all supported python versions. To use it, "pip install tox"
+# and then run "tox" from this directory.
+
+[tox]
+isolated_build = True
+envlist = py38
+
+[testenv]
+deps =
+    toml
+    black
+    flake8
+    isort
+    mccabe
+    pylint
+    pytest
+    coverage # development dependency
+
+commands =
+    black --check mhered_test_pkg
+    isort  --check mhered_test_pkg
+    flake8 mhered_test_pkg --max-complexity 10
+    pylint mhered_test_pkg
+    coverage run --source=mhered_test_pkg --branch -m pytest . # execute
+    coverage report -m --fail-under 90 # report & fail below 90%
+
+```
+
+Added tests to increase coverage up to 97% - i.e. all lines of code covered except the case `"__name__" == "__main__:"` because tests import as module.
+
+![97pc_coverage](assets/97pc_coverage.png)
+
+In the process I learned about monkeypatching user input, using iterators to simulate a sequence of inputs, or testing for sys exit, see references in [./tests/test_mhered_test_pkg.py](./tests/test_mhered_test_pkg.py)

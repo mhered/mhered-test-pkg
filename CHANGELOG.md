@@ -1,3 +1,17 @@
+<a id='changelog-0.1.3'></a>
+
+# 0.1.3 — 2022-08-03
+
+## Added
+
+- Automated formatting, linting, testing and coverage with tox
+- README.md sections on tox and coverage
+
+- Tests coverage 97%
+
+## Changed
+
+- Refactor code into testable functions
 
 <a id='changelog-0.1.2'></a>
 # 0.1.2 — 2022-08-01

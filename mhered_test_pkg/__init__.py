@@ -1,6 +1,6 @@
 """A simple Rock Paper Scissors game"""
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 
 import random
 import sys
@@ -49,17 +49,12 @@ def compare_moves(player_move, computer_move):
         (player_move == "p" and computer_move == "r"),
         (player_move == "s" and computer_move == "p"),
     ]
-    computer_wins = [
-        (player_move == "s" and computer_move == "r"),
-        (player_move == "r" and computer_move == "p"),
-        (player_move == "p" and computer_move == "s"),
-    ]
 
     if player_move == computer_move:
         outcome = "tie"
     elif any(player_wins):
         outcome = "win"
-    elif any(computer_wins):
+    else:
         outcome = "lose"
     return outcome
 
@@ -92,7 +87,7 @@ def rock_paper_scissors():
         elif outcome == "lose":
             print("You lose!")
             losses = losses + 1
-        elif outcome == "tie":
+        else:  # outcome == "tie":
             print("It is a tie!")
             ties = ties + 1
 
