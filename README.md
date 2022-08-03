@@ -716,6 +716,6 @@ fa7a843 (tag: v0.1.1) Configure versions in scriv
 $ git push origin v0.1.3
 ```
 
+### CI/CD with GitHub Actions
 
-
-Next, I am ready to start with CI/CD with GitHub Actions...
+test
