@@ -19,7 +19,7 @@ $ pip install mhered-test-pkg
 Usage:
 
 ```bash
-$ python3 -m mhered_test_pkg
+$ python3 mhered_test_pkg/__init__.py
 ```
 
 
@@ -718,4 +718,118 @@ $ git push origin v0.1.3
 
 ### CI/CD with GitHub Actions
 
+[GitHub Actions](https://docs.github.com/en/actions) allow automating workflows of actions that are triggered by certain events e.g. a commit pushed to the repo, a pull request or a release. They are defined in YAML files that live in the directory `.github/workflows`. 
+
+The CI runner spawns the full environment in a Github server, including setting up the OS with`runs-on:`, installing and activating python with `uses: actions/setup-python@v2` ... `with:`  ... `python-version:`...`"3.8"`, installing dependencies (via `tox` or `poetry` commands) and downloading our repository with `uses: actions/checkout@v2`
+
+A nice intro tutorial in Youtube:  https://www.youtube.com/watch?v=R8_veQiYBjI
+
+```yaml
+# .github/workflows/CI.yaml
+name: mhered-test-pkg CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install tox tox-gh-actions
+
+      - name: Run tox
+        run: tox
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+            fail_ci_if_error: true
+
+```
+
 Everything seems to be working including Codecov integration except PR comments.
+
+## Automatic publishing of releases to PyPI
+
+I wrote a new `PyPI_publish.yaml` file with the following steps: 
+
+1. Checkout the repo
+2. Set up Python 3.8
+3. Install Poetry and dependencies
+4. Configure Poetry with a PyPI token
+5. Build and publish the package
+
+A more straighforward solution using a pre-made GH action from PyPA to upload both to Test PyPI and PyPI is here: https://packaging.python.org/en/latest/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/
+
+Note: add the Test PyPI and PyPI credentials created earlier as repository secrets in Github as `PYPI_TOKEN` and `TEST_PYPI_TOKEN`: **Settings** --> **Secrets** --> **Actions** --> **Add new repository secret**.
+
+```yaml
+# .github/workflows/PyPI_publish.yaml
+name: publish mhered-test-pkg to PyPI
+
+on:
+  release:
+    types: [published]
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Install poetry and dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install poetry
+
+      - name: Configure poetry
+        env:
+          pypi_token: ${{ secrets.PyPI_TOKEN }}
+        run: poetry config pypi_token.pypi $pypi_token
+        
+      - name: Build and publish
+        uses: poetry publish --build
+```
+
+New release:
+
+```bash
+$ poetry version patch
+$ atom mhered_test_pkg/__init__.py
+$ pytest
+$ scriv create --edit
+$ scriv collect
+$ git add .
+$ git commit -m "Add CI/CD and Codecov - release 0.1.4"
+$ git push
+
+$ git tag -a v0.1.4 -m "Add github actions for CICD and codecov integration"
+$ git push origin v0.1.4
+```

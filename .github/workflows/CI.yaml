@@ -1,4 +1,4 @@
-# .github/workflows/ci.yaml
+# .github/workflows/CI.yaml
 name: mhered-test-pkg CI
 
 on:

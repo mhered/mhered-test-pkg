@@ -1,3 +1,13 @@
+
+<a id='changelog-0.1.4'></a>
+# 0.1.4 — 2022-08-04
+
+## Added
+
+- Github Action CI.yaml to run tox for CI on push and pull requests
+- Codecov integration
+- PyPI_publish.yaml to publish releases to PyPI
+
 <a id='changelog-0.1.3'></a>
 
 # 0.1.3 — 2022-08-03
