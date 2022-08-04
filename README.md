@@ -830,6 +830,6 @@ $ git add .
 $ git commit -m "Add CI/CD and Codecov - release 0.1.4"
 $ git push
 
-$ git tag -a v0.1.4 -m "Add github actions for CICD and codecov integration"
+$ git tag -a v0.1.4 -m "Add GH actions for CI/CD and Codecov integration"
 $ git push origin v0.1.4
 ```
