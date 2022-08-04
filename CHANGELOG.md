@@ -1,4 +1,11 @@
 
+<a id='changelog-0.1.5'></a>
+# 0.1.5 — 2022-08-05
+
+## Fixed
+
+- Incorrect call to PYPI_TOKEN in GH action PyPI_publish.yaml
+
 <a id='changelog-0.1.4'></a>
 # 0.1.4 — 2022-08-04
 

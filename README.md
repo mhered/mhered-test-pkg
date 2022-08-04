@@ -833,3 +833,21 @@ $ git push
 $ git tag -a v0.1.4 -m "Add GH actions for CI/CD and Codecov integration"
 $ git push origin v0.1.4
 ```
+
+Did not work.
+
+I found a typo (I was incorrectly calling `secrets.PyPI_TOKEN` instead of `secrets.PYPI_TOKEN` in `PyPI_publish.yaml`) and several minor updates to `README.md` so I create a new release:
+
+```bash
+$ poetry version patch
+$ atom mhered_test_pkg/__init__.py
+$ pytest
+$ scriv create --edit
+$ scriv collect
+$ git add .
+$ git commit -m "Fix typo in call to PYPI_TOKEN - release 0.1.5"
+$ git push
+
+$ git tag -a v0.1.5 -m "Add GH actions for CI/CD and Codecov integration"
+$ git push origin v0.1.5
+```
