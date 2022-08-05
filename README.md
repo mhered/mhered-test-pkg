@@ -815,7 +815,7 @@ jobs:
         run: poetry config pypi_token.pypi $pypi_token
         
       - name: Build and publish
-        uses: poetry publish --build
+        run: poetry publish --build
 ```
 
 New release:
@@ -834,9 +834,7 @@ $ git tag -a v0.1.4 -m "Add GH actions for CI/CD and Codecov integration"
 $ git push origin v0.1.4
 ```
 
-Did not work.
-
-I found a typo (I was incorrectly calling `secrets.PyPI_TOKEN` instead of `secrets.PYPI_TOKEN` in `PyPI_publish.yaml`) and several minor updates to `README.md` so I create a new release:
+Did not work initially. I fixed two typos (I was incorrectly calling `secrets.PyPI_TOKEN` instead of `secrets.PYPI_TOKEN` in `PyPI_publish.yaml` and calling `uses:` instead of `run: poetry publish --build`) and added minor updates to `README.md` and I created a couple of releases in the process.
 
 ```bash
 $ poetry version patch
@@ -845,9 +843,11 @@ $ pytest
 $ scriv create --edit
 $ scriv collect
 $ git add .
-$ git commit -m "Fix typo in call to PYPI_TOKEN - release 0.1.5"
+$ git commit -m "Commit Message - release 0.1.X"
 $ git push
 
-$ git tag -a v0.1.5 -m "Add GH actions for CI/CD and Codecov integration"
-$ git push origin v0.1.5
+$ git tag -a v0.1.X -m "Release Message"
+$ git push origin v0.1.X
 ```
+
+Finally succeeded with `v0.1.6`

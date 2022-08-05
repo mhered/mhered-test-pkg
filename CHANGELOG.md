@@ -1,4 +1,12 @@
 
+<a id='changelog-0.1.6'></a>
+# 0.1.6 — 2022-08-05
+
+## Fixed
+
+- Bug: In PyPI_publish.yaml replace `uses: poetr build --publish` with `run:`
+
+
 <a id='changelog-0.1.5'></a>
 # 0.1.5 — 2022-08-05
 
