@@ -811,9 +811,9 @@ jobs:
 
       - name: Configure poetry
         env:
-          pypi_token: ${{ secrets.PyPI_TOKEN }}
-        run: poetry config pypi_token.pypi $pypi_token
-        
+          pypi_token: ${{ secrets.PYPI_TOKEN }}
+        run: poetry config pypi-token.pypi $pypi_token
+
       - name: Build and publish
         run: poetry publish --build
 ```
@@ -834,7 +834,13 @@ $ git tag -a v0.1.4 -m "Add GH actions for CI/CD and Codecov integration"
 $ git push origin v0.1.4
 ```
 
-Did not work initially. I fixed two typos (I was incorrectly calling `secrets.PyPI_TOKEN` instead of `secrets.PYPI_TOKEN` in `PyPI_publish.yaml` and calling `uses:` instead of `run: poetry publish --build`) and added minor updates to `README.md` and I created a couple of releases in the process.
+Did not work initially. I found three typos  in `PyPI_publish.yaml`, should be: 
+
+- `secrets.PYPI_TOKEN` instead of `secrets.PyPI_TOKEN`
+- `run: poetry config pypi-token.pypi $pypi_token` instead of `pypi_token.pypi`
+-  `run: poetry publish --build` instead of `uses:` 
+
+I also added minor updates to `README.md` and I created a few releases in the process.
 
 ```bash
 $ poetry version patch
@@ -850,4 +856,4 @@ $ git tag -a v0.1.X -m "Release Message"
 $ git push origin v0.1.X
 ```
 
-Finally succeeded with `v0.1.6`
+Finally succeeded with `v0.1.7`

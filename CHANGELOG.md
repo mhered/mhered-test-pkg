@@ -1,20 +1,23 @@
+<a id='changelog-0.1.7'></a>
 
-<a id='changelog-0.1.6'></a>
-# 0.1.6 — 2022-08-05
+# 0.1.7 — 2022-08-05
 
 ## Fixed
 
-- Bug: In PyPI_publish.yaml replace `uses: poetr build --publish` with `run:`
+- Typo in `PyPI_publish.yaml`: `pypi_token.pypi` should be `pypi-token.pypi`
 
+- Typo in `PyPI_publish.yaml`: `uses: poetr build --publish` should be `run:`
 
 <a id='changelog-0.1.5'></a>
+
 # 0.1.5 — 2022-08-05
 
 ## Fixed
 
-- Incorrect call to PYPI_TOKEN in GH action PyPI_publish.yaml
+- Typo in `PyPI_publish.yaml`: `PyPI_TOKEN` should be  `PYPI_TOKEN`  
 
 <a id='changelog-0.1.4'></a>
+
 # 0.1.4 — 2022-08-04
 
 ## Added
