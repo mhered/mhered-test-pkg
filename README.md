@@ -1,14 +1,12 @@
----
-typora-copy-images-to: assets
----
-
 # mhered-test-pkg
 
-A simple demo package to practice how to create python packages. 
+A simple demo package to practice creating python packages. 
+
+[![][pypi-image]][pypi-url] [![][license-image]][license-url] [![][versions-image]][versions-url] [![][stars-image]][stars-url] [![][build-image]][build-url] [![][coverage-image]][coverage-url]
 
 Inspired in this article: https://mathspp.com/blog/how-to-create-a-python-package-in-2022
 
-The code implements a simple Rock, Paper, Scissors text-based game. Inspired by Al Sweigart's  [Automate the boring stuff with Python](https://automatetheboringstuff.com/).
+The code implements a simple Rock, Paper, Scissors text-based game, loosely inspired in the one wrote by Al Sweigart for his great book  [Automate the boring stuff with Python](https://automatetheboringstuff.com/).
 
 Installation:
 
@@ -22,9 +20,7 @@ Usage:
 $ python3 mhered_test_pkg/__init__.py
 ```
 
-
-
-## How to create a python package 
+## Creating a python package: Howto 
 
 ### Pick a name
 
@@ -650,7 +646,7 @@ $ coverage run --source=mhered_test_pkg --branch -m pytest .
 $ coverage html
 ```
 
-![22pc_coverage](assets/22pc_coverage.png)
+![22pc_coverage](assets/22pc_coverage.png)s
 
 To add `coverage` to `tox` modify `tox.ini` to add the relevant lines:
 
@@ -857,3 +853,22 @@ $ git push origin v0.1.X
 ```
 
 Finally succeeded with `v0.1.7`
+
+### Add badges to README.md
+
+Piece of cake following the instructions in https://shields.io/
+
+
+<!-- Badges: -->
+[pypi-image]: https://img.shields.io/pypi/v/mhered-test-pkg
+[pypi-url]: https://pypi.org/project/mhered-test-pkg/
+[build-image]: https://github.com/mhered/mhered-test-pkg/actions/workflows/CI.yaml/badge.svg
+[build-url]: https://github.com/mhered/mhered-test-pkg/actions/workflows/CI.yaml
+[coverage-image]: https://codecov.io/gh/mhered/mhered-test-pkg/branch/main/graph/badge.svg
+[coverage-url]: https://codecov.io/gh/mhered/mhered-test-pkg/
+[stars-image]: https://img.shields.io/github/stars/mhered/mhered-test-pkg
+[stars-url]: https://github.com/mhered/mhered-test-pkg
+[versions-image]: https://img.shields.io/pypi/pyversions/mhered-test-pkg
+[versions-url]: https://pypi.org/project/mhered-test-pkg/
+[license-image]: https://img.shields.io/github/license/mhered/mhered-test-pkg
+[license-url]: https://github.com/mhered/mhered-test-pkg/blob/main/LICENSE.md
