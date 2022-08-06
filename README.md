@@ -23,7 +23,7 @@ $ rps
 Alternatively
 
 ```bash
-$ python3 -m src.mhered_test_pkg
+$ python3 -m mhered_test_pkg
 ```
 
 ## Creating a python package: Howto 
@@ -652,7 +652,7 @@ $ coverage run --source=mhered_test_pkg --branch -m pytest .
 $ coverage html
 ```
 
-![22pc_coverage](assets/22pc_coverage.png)s
+![22pc_coverage](assets/22pc_coverage.png)
 
 To add `coverage` to `tox` modify `tox.ini` to add the relevant lines:
 
@@ -891,7 +891,7 @@ commands =
 
 ### Add entry points
 
-As an alternative to calling:
+In development, as an alternative to calling:
 
 ```bash
 $ python3 ./src/mhered_test_pkg/__init__.py
@@ -927,6 +927,8 @@ to create a shortcut to execute the game writing:
 ```bash
 $ rps
 ```
+
+Note that when the app is distributed the methods that work are different! - cfr. the ones described at the beginning of the `README.md`
 
 Time to make a new release 0.1.8...
 
