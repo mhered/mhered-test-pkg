@@ -858,8 +858,74 @@ Finally succeeded with `v0.1.7`
 
 Piece of cake following the instructions in https://shields.io/
 
+### Move code to `/src`
+
+Ad adapt everywhere:
+
+* in tests change the import statement:
+
+```python
+from src.mhered_test_pkg import ...
+```
+
+* in `tox.ini` replace `mhered_test_pkg` by `src` 
+
+```toml
+...
+commands =
+    black --check src
+    isort  --check src
+    flake8 src --max-complexity 10
+    pylint src
+    coverage run --source=src --branch -m pytest .
+    coverage report -m --fail-under 60
+    coverage xml
+...
+```
+
+### Add entry points
+
+As an alternative to calling:
+
+```bash
+$ python3 ./src/mhered_test_pkg/__init__.py
+```
+
+1. We can create a `__main__.py` file:
+
+```python
+""" __main__ entry point """
+from mhered_test_pkg import rock_paper_scissors
+
+if __name__ == "__main__":
+    rock_paper_scissors()
+```
+
+to allow calling the package as a module:
+
+```bash
+$ python3 -m src.mhered_test_pkg
+```
+
+And/or 
+
+2. edit `pyproject.py` to add the following line:
+
+```toml
+[tool.poetry.scripts]
+rps = "mhered_test_pkg.__init__:rock_paper_scissors
+```
+
+to create a shortcut to execute the game writing:
+
+```bash
+$ rps
+```
+
+Time to make a new release 0.1.8...
 
 <!-- Badges: -->
+
 [pypi-image]: https://img.shields.io/pypi/v/mhered-test-pkg
 [pypi-url]: https://pypi.org/project/mhered-test-pkg/
 [build-image]: https://github.com/mhered/mhered-test-pkg/actions/workflows/CI.yaml/badge.svg
