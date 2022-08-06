@@ -1,3 +1,22 @@
+
+<a id='changelog-0.1.8'></a>
+# 0.1.8 — 2022-08-07
+
+## Added
+
+- New entry point `$ rps` to execute rock, paper, scissors game
+- Badges in `README.md`
+
+## Changed
+
+- Moved code to `src/` folder
+
+## Fixed
+
+- Module can be executed in two ways: `$ python3 -m src.mhered_test_pkg` or `$ python3 ./src/mhered_test_pkg/__main__.py`
+
+
+
 <a id='changelog-0.1.7'></a>
 
 # 0.1.7 — 2022-08-05

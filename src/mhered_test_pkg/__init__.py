@@ -1,6 +1,6 @@
 """A simple Rock Paper Scissors game"""
 
-__version__ = "0.1.7"
+__version__ = "0.1.8"
 
 import random
 import sys
