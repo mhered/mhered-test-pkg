@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mhered-test-pkg"
-version = "0.1.8"
+version = "0.1.9"
 description = "A simple demo package to practice how to create python packages."
 authors = ["Manuel Heredia <manolo.heredia@gmail.com>"]
 readme = "README.md"
