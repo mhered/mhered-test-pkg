@@ -3,7 +3,7 @@ from pathlib import Path
 import toml
 from pytest import raises
 
-from mhered_test_pkg import (
+from src.mhered_test_pkg import (
     __version__,
     compare_moves,
     computer_play,
