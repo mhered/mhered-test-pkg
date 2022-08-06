@@ -17,7 +17,13 @@ $ pip install mhered-test-pkg
 Usage:
 
 ```bash
-$ python3 mhered_test_pkg/__init__.py
+$ rps
+```
+
+Alternatively
+
+```bash
+$ python3 -m src.mhered_test_pkg
 ```
 
 ## Creating a python package: Howto 
