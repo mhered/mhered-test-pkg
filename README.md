@@ -1009,6 +1009,8 @@ deps =
     toml
     pytest
     coverage
+    
+commands =
     coverage run --source=src --branch -m pytest {toxinidir}
     coverage report -m --fail-under 90
     coverage xml -o {toxinidir}/coverage.xml
