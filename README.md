@@ -6,7 +6,7 @@ A simple demo package to practice creating python packages.
 
 Inspired in this article: https://mathspp.com/blog/how-to-create-a-python-package-in-2022
 
-The code implements a simple Rock, Paper, Scissors text-based game, loosely inspired in the one wrote by Al Sweigart for his great book  [Automate the boring stuff with Python](https://automatetheboringstuff.com/).
+The code implements a simple Rock, Paper, Scissors text-based game, loosely inspired in the one Al Sweigart wrote in  [Automate the boring stuff with Python](https://automatetheboringstuff.com/).
 
 Installation:
 
@@ -931,6 +931,55 @@ $ rps
 Note that when the app is distributed the methods that work are different! - cfr. the ones described at the beginning of the `README.md`
 
 Time to make a new release 0.1.8...
+
+### Tidy up
+
+I noticed some issues due to discrepancies between the linting in pre-commit and the one in tox. For instance isort and black seem to be doing incompatible changes in one of the improts in tests.
+
+To add all the linting to pre-commit, we edit `.pre-commit-config.yaml`:
+
+```yaml
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: check-toml
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+      - id: black
+
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+        args: ["--profile", "black"]
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 4.0.1
+    hooks:
+      - id: flake8
+        additional_dependencies: [mccabe]
+        args: ["--max-line-length", "88", "--max-complexity", "10"]
+
+  - repo: https://github.com/PyCQA/pylint/
+    rev: v2.14.5
+    hooks:
+      - id: pylint
+        exclude: tests/  # Prevent files in tests/ to be passed in to pylint.
+```
+
+
+
+
+
+
 
 <!-- Badges: -->
 
