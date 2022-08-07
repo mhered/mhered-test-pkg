@@ -1,5 +1,23 @@
 
+<a id='changelog-0.1.10'></a>
+# 0.1.10 — 2022-08-08
+
+## Added
+
+- Create linting and coverage environments in `tox.ini`
+
+## Changed
+
+- Move linting checks to `pre-commit`
+- Run linting and coverage from `tox` under Python 3.8 only
+
+## Fixed
+
+- Review of `README.md`
+- Review of `CHANGELOG.md`
+
 <a id='changelog-0.1.8'></a>
+
 # 0.1.8 — 2022-08-07
 
 ## Added
@@ -13,7 +31,7 @@
 
 ## Fixed
 
-- Module can be executed in two ways: `$ python3 -m src.mhered_test_pkg` or `$ python3 ./src/mhered_test_pkg/__main__.py`
+- In development module can be executed in two ways: `$ python3 -m src.mhered_test_pkg` or `$ python3 ./src/mhered_test_pkg/__main__.py`
 
 
 
@@ -41,9 +59,9 @@
 
 ## Added
 
-- Github Action CI.yaml to run tox for CI on push and pull requests
-- Codecov integration
-- PyPI_publish.yaml to publish releases to PyPI
+- Github action `CI.yaml` to run `tox` for CI on push and pull requests
+- **Codecov** integration
+- `PyPI_publish.yaml` to publish releases to **PyPI**
 
 <a id='changelog-0.1.3'></a>
 
@@ -51,8 +69,8 @@
 
 ## Added
 
-- Automated formatting, linting, testing and coverage with tox
-- README.md sections on tox and coverage
+- Automated formatting, linting, testing and coverage with `tox`
+- `README.md` sections on `tox` and `coverage`
 
 - Tests coverage 97%
 

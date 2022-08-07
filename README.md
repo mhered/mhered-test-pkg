@@ -6,7 +6,7 @@ A simple demo package to practice creating python packages.
 
 Inspired in this article: https://mathspp.com/blog/how-to-create-a-python-package-in-2022
 
-The code implements a simple Rock, Paper, Scissors text-based game, loosely inspired in the one Al Sweigart wrote in  [Automate the boring stuff with Python](https://automatetheboringstuff.com/).
+The code implements a simple Rock, Paper, Scissors text-based game, loosely inspired in the one Al Sweigart wrote for Chapter 2 of  [Automate the boring stuff with Python](https://automatetheboringstuff.com/).
 
 Installation:
 
@@ -30,7 +30,7 @@ $ python3 -m mhered_test_pkg
 
 ### Pick a name
 
-Check the name is available in [PyPI](https://pypi.org/)
+Check that the name is available in [PyPI](https://pypi.org/)
 
 ### Initialize `poetry`
 
@@ -40,7 +40,7 @@ Install `poetry` (I started from [here](https://python-poetry.org/docs/#osx--lin
 $ curl -sSL https://install.python-poetry.org/ | python3 -
  ```
 
-Create a local dedicated folder and initialize `poetry` inside
+Create a local folder for the project and initialize `poetry` inside
 
 ```bash
 $ cd ~
@@ -59,18 +59,23 @@ $ tree
 └── tests
     ├── __init__.py
     └── test_mhered_test_pkg.py
-    
+```
+
+Note: I renamed `README.rst` to `README.md` to work in **Markdown**.
+
+```bash
 $ mv README.rst README.md
+```
+
+Run `poetry install` to create a file `poetry.lock` with the dependencies:
+
+```bash
 $ poetry install
 ```
 
-Note: I renamed `README.rst` to `README.md` because I prefer to work in **Markdown**.
-
-Note: Running `poetry install` creates a file `poetry.lock` with the dependencies
-
 ### Initialize git in the local folder
 
-Create an empty github repo: **[mhered-test-pkg](https://github.com/mhered/mhered-test-pkg)** and follow the instructions to set it as the remote and push a first commit with the file structure:
+Create an empty github repo: **[mhered-test-pkg](https://github.com/mhered/mhered-test-pkg)** and follow the instructions to set it as the remote and push a first commit with the local file structure:
 
 ```bash
 $ git init
@@ -122,7 +127,7 @@ Activate the `poetry` virtual environment to be able to use `pre-commit` then in
 $ poetry shell
 
 $ pre-commit install
-$ pre-commit run all-files
+$ pre-commit run --all-files
 ```
 
 Note: `pre-commit` is not found unless run from inside the shell - or you can use `poetry run pre-commit`
@@ -135,7 +140,7 @@ $ git commit -m "Run all pre-commits."
 $ git push
 ```
 
-Note: If some test fails, you need to add again the modified files and repeat the git commit - which is fine. But there is a strange behavior if the file was open: it seems to revert to an older version?
+Note: If some test fails the commit is cancelled and the files are automatically modified, so you need to add again the modified files and repeat the git commit - which is fine. However there is a strange behavior if the file was open: it seems to revert to an older version?
 
 ### Add a license
 
@@ -143,7 +148,7 @@ Note: If some test fails, you need to add again the modified files and repeat th
 
 This will add [LICENSE.md](./LICENSE.md)
 
-### Upload the stub package to TestPyPI
+### Upload the TestPyPI
 
 Declare the test repository https://test.pypi.org in `poetry` and name it  `testpypi`:
 
@@ -200,7 +205,7 @@ format = "md"
 version = "literal: pyproject.toml: tool.poetry.version"
 ```
 
-Then create the default directory for changelog fragments `changelog.d/`. Note: add an empty `.gitkeep`  file so that git tracks the empty folder.
+Then create the default directory for changelog fragments `changelog.d/`, and add an empty `.gitkeep`  file so that git tracks the empty folder.
 
 ```bash
 $ mkdir changelog.d
@@ -270,16 +275,6 @@ q
 Bye!
 
 $ pip uninstall mhered-test-pkg
-ROCK, PAPER, SCISSORS
-0 Wins, 0 Losses, 0 Ties
-Enter your move: (r)ock (p)aper (s)cissors or (q)uit
-r
-ROCK versus... SCISSORS
-You win!
-1 Wins, 0 Losses, 0 Ties
-Enter your move: (r)ock (p)aper (s)cissors or (q)uit
-q
-Bye!
 ```
 
 ###  Publish a release
@@ -299,44 +294,22 @@ $ scriv collect
 Lets commit: 
 
 ```bash
-$ git add changelog.d/20220731_143829_manolo.heredia.md CHANGELOG.md README.md pyproject.toml
+$ git add CHANGELOG.md README.md pyproject.toml
 $ git commit -m "Prepare release 0.1.0"
 ```
 
-Tag the commit, and push it to the remote (seen [here](https://stackabuse.com/git-push-tags-to-a-remote-repo/)):
+Tag the commit, and push the tag to the remote (seen [here](https://stackabuse.com/git-push-tags-to-a-remote-repo/)):
 
 ```bash
 $ git tag -a v0.1.0 -m "Initial version"
 $ git push origin v0.1.0
 ```
 
-I discovered I hadn't configured version numbering for scriv, so I did it now, and added a new release to test it.
+I discovered I hadn't properly configured version numbering for scriv ( had forgotten to add `version = "literal: pyproject.toml: tool.poetry.version"` under `[tool.scriv]` in `pyproject.toml` ), so I did it now, and added a new release to test it. I bumped the version in `pyproject.toml` to  `0.1.1` with:
 
-First modify `pyproject.toml` to increment the version to `0.1.1` and have `scriv` read the version from `tool.poetry.version`:
-
-```toml
-[tool.poetry]
-name = "mhered-test-pkg"
-version = "0.1.1"
-description = "A simple demo package to practice how to create python packages."
-authors = ["Manuel Heredia <manolo.heredia@gmail.com>"]
-readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.8"
-
-[tool.poetry.dev-dependencies]
-pytest = "^5.2"
-pre-commit = "^2.20.0"
-scriv = {extras = ["toml"], version = "^0.16.0"}
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.scriv]
-format = "md"
-version = "literal: pyproject.toml: tool.poetry.version"
+```bash
+$ poetry version patch
+Bumping version from 0.1.0 to 0.1.1
 ```
 
 Next add a changelog fragment:
@@ -353,9 +326,7 @@ and edit it to describe the change
 - Configure `scriv` to get version number from `pyproject.toml`
 ```
 
-Bump version in `mhered-test-pkg/__init__.py` `__version__ = "0.1.1"`
-
-Add a unit test to check it is always in sync with `tool.poetry.version` in `pyproject.toml` ([there seems to be no better way](https://github.com/python-poetry/poetry/issues/144#issuecomment-877835259))
+Then I manually increased the version in `mhered-test-pkg/__init__.py` `__version__ = "0.1.1"`and added a test to check it is always in sync with `tool.poetry.version` in `pyproject.toml` ([there seems to be no better way](https://github.com/python-poetry/poetry/issues/144#issuecomment-877835259))
 
 ```python
 import toml
@@ -375,21 +346,17 @@ def test_versions_are_in_sync():
     assert init_py_version == pyproject_version
 ```
 
-Add a new changelog fragment:
+Add a new changelog fragment and edit it to describe the change
 
 ```bash
-$ scriv create
+$ scriv create --edit
 ```
-
-and edit it to describe the change
 
 ```markdown
 ## Added
 
 - Test to check that versions defined in `pyproject.py` and `__init__.py` are in sync
 ```
-
-
 
 Update the Changelog:
 
@@ -424,7 +391,7 @@ It still does not work... to be continued.
 
 ### Troubleshooting
 
-There is something off with the tag `v0.1.0`. Wat linked to `8ad878f` which does not show here!
+There is something off with the tag `v0.1.0`. Was linked to `8ad878f` which does not show here!
 
 ```bash
 $ git log --oneline
@@ -486,7 +453,7 @@ e18df98 Create LICENSE.md
 
 I added a couple of tests, refactored a bit the code and committed the changes.
 
-Then, to create a release: 
+Then, to create a release there are a few steps: 
 
 - bump the  version
 - edit `__init__.py` manually to sync version number
@@ -1009,7 +976,6 @@ deps =
     toml
     pytest
     coverage
-    
 commands =
     coverage run --source=src --branch -m pytest {toxinidir}
     coverage report -m --fail-under 90
@@ -1033,6 +999,8 @@ Finally modify the GH action `CI.yaml` to upload to codecov only when running Py
         with:
           fail_ci_if_error: true
 ```
+
+And with this we are ready to publish the final release 0.1.10.
 
 
 
