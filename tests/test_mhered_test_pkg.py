@@ -123,7 +123,7 @@ def test_player_play_exits_with_q(monkeypatch):
 
     with raises(SystemExit) as pytest_wrapped_e:
         monkeypatch.setattr("builtins.input", lambda prompt="": "q")
-        player_move = player_play()
+        _ = player_play()
     assert pytest_wrapped_e.type == SystemExit
     # assert pytest_wrapped_e.value.code == 42
 

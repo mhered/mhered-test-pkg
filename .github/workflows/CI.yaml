@@ -33,7 +33,8 @@ jobs:
         run: tox
 
       - name: Upload coverage to Codecov
-        run: |
-          curl -Os https://uploader.codecov.io/latest/linux/codecov
-          chmod +x codecov
-          ./codecov
+        # Only generate the coverage report in Python 3.8
+        if: "matrix.python-version == '3.8'"
+        uses: codecov/codecov-action@v2
+        with:
+          fail_ci_if_error: true

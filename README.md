@@ -975,9 +975,62 @@ repos:
         exclude: tests/  # Prevent files in tests/ to be passed in to pylint.
 ```
 
+Modify `tox.ini` to create dedicated environments for linting and coverage and execute them only with python 3.8 to avoid running them multiple times. The linting one simple calls pre-commit:
 
+```toml
+# tox (https://tox.readthedocs.io/) is a tool for running tests
+# in multiple virtualenvs. This configuration file will run the
+# test suite on all supported python versions. To use it, "pip install tox"
+# and then run "tox" from this directory.
 
+[tox]
+isolated_build = True
+envlist =
+   py38,
+   py39,
+   py310,
+   linting,
+   coverage,
 
+[testenv]
+deps =
+    toml
+    pytest
+changedir = {envtmpdir}
+commands =
+    pytest {toxinidir}
+
+[testenv:linting]
+deps = pre-commit
+commands = pre-commit run --all-files --show-diff-on-failure
+
+[testenv:coverage]
+deps =
+    toml
+    pytest
+    coverage
+    coverage run --source=src --branch -m pytest {toxinidir}
+    coverage report -m --fail-under 90
+    coverage xml -o {toxinidir}/coverage.xml
+
+[gh-actions]
+python =
+    3.8: py38, linting, coverage
+    3.9: py39
+    3.10: py310
+```
+
+Finally modify the GH action `CI.yaml` to upload to codecov only when running Python 3.8. In this case we use a premade GH action instead of running manually the commands:
+
+```yaml
+      ...
+      - name: Upload coverage to Codecov
+        # Only generate the coverage report in Python 3.8
+        if: "matrix.python-version == '3.8'"
+        uses: codecov/codecov-action@v2
+        with:
+          fail_ci_if_error: true
+```
 
 
 
